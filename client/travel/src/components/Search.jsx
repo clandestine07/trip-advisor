@@ -2,23 +2,23 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
-export default function Search({city}) {
+export default function Search({props}) {
   const [searchParams] = useSearchParams();
   const city = searchParams.get('city');
   const [cities, setCities] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    async () => {
       try {
         const url = "http://localhost:3000/search/city";
         const options = {
-          method: "POST",
+          method: "GET",
           url: url,
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json;charset=UTF-8",
           },
-          data: {
+          params: {
             city: city,
           },
         };
@@ -31,15 +31,14 @@ export default function Search({city}) {
         console.error('Error fetching data:', error);
       }
     };
-    fetchData();
-  }, []);
+  }, [city]);
   return (
     <>
       <div>
-        <h1>Search Results for "{query}"</h1>
+        <h1>Search Results for "{city}"</h1>
         <ul>
-          {cities.map((cities) => (
-            <li key={cities.id}>{cities.name}</li>
+          {cities.map((city) => (
+            <li key={city.id}>{city.name}</li>
           ))}
         </ul>
       </div>
